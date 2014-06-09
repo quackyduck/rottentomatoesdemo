@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A2CDA301945020600FCA039 /* NMDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2CDA2E1945020600FCA039 /* NMDetailViewController.m */; };
-		0A2CDA311945020600FCA039 /* NMDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2CDA2F1945020600FCA039 /* NMDetailViewController.xib */; };
+		0A2CDA3519459BDE00FCA039 /* NMDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2CDA3319459BDE00FCA039 /* NMDetailViewController.m */; };
+		0A2CDA3619459BDE00FCA039 /* NMDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2CDA3419459BDE00FCA039 /* NMDetailViewController.xib */; };
 		0A7DACB91942DA99009806DF /* NMMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7DACB81942DA99009806DF /* NMMovie.m */; };
 		0AC6069C19441493003617C6 /* NMNetworkErrorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC6069B19441493003617C6 /* NMNetworkErrorView.m */; };
 		0AE91FCD194033B600AFEAB9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AE91FCC194033B600AFEAB9 /* Foundation.framework */; };
@@ -41,9 +41,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0A2CDA2D1945020600FCA039 /* NMDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NMDetailViewController.h; sourceTree = "<group>"; };
-		0A2CDA2E1945020600FCA039 /* NMDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NMDetailViewController.m; sourceTree = "<group>"; };
-		0A2CDA2F1945020600FCA039 /* NMDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NMDetailViewController.xib; sourceTree = "<group>"; };
+		0A2CDA3219459BDE00FCA039 /* NMDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NMDetailViewController.h; path = rottentomatoesdemo/NMDetailViewController.h; sourceTree = "<group>"; };
+		0A2CDA3319459BDE00FCA039 /* NMDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NMDetailViewController.m; path = rottentomatoesdemo/NMDetailViewController.m; sourceTree = "<group>"; };
+		0A2CDA3419459BDE00FCA039 /* NMDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NMDetailViewController.xib; path = rottentomatoesdemo/NMDetailViewController.xib; sourceTree = "<group>"; };
 		0A7DACB71942DA99009806DF /* NMMovie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NMMovie.h; sourceTree = "<group>"; };
 		0A7DACB81942DA99009806DF /* NMMovie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NMMovie.m; sourceTree = "<group>"; };
 		0AC6069A19441493003617C6 /* NMNetworkErrorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NMNetworkErrorView.h; sourceTree = "<group>"; };
@@ -102,12 +102,12 @@
 		0A7DACB4194297CF009806DF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				0A2CDA3219459BDE00FCA039 /* NMDetailViewController.h */,
+				0A2CDA3319459BDE00FCA039 /* NMDetailViewController.m */,
+				0A2CDA3419459BDE00FCA039 /* NMDetailViewController.xib */,
 				0AE91FFB194034B900AFEAB9 /* NMMoviesViewController.h */,
 				0AE91FFC194034B900AFEAB9 /* NMMoviesViewController.m */,
 				0AE91FFD194034B900AFEAB9 /* NMMoviesViewController.xib */,
-				0A2CDA2D1945020600FCA039 /* NMDetailViewController.h */,
-				0A2CDA2E1945020600FCA039 /* NMDetailViewController.m */,
-				0A2CDA2F1945020600FCA039 /* NMDetailViewController.xib */,
 			);
 			name = Controllers;
 			path = ..;
@@ -289,7 +289,7 @@
 			files = (
 				0AE91FD7194033B600AFEAB9 /* InfoPlist.strings in Resources */,
 				0AE91FDF194033B600AFEAB9 /* Images.xcassets in Resources */,
-				0A2CDA311945020600FCA039 /* NMDetailViewController.xib in Resources */,
+				0A2CDA3619459BDE00FCA039 /* NMDetailViewController.xib in Resources */,
 				0AE91FFF194034B900AFEAB9 /* NMMoviesViewController.xib in Resources */,
 				0AE9200419403D4900AFEAB9 /* NMMovieTableViewCell.xib in Resources */,
 			);
@@ -349,7 +349,7 @@
 				0AE91FDD194033B600AFEAB9 /* NMAppDelegate.m in Sources */,
 				0AE91FFE194034B900AFEAB9 /* NMMoviesViewController.m in Sources */,
 				0AE9200319403D4900AFEAB9 /* NMMovieTableViewCell.m in Sources */,
-				0A2CDA301945020600FCA039 /* NMDetailViewController.m in Sources */,
+				0A2CDA3519459BDE00FCA039 /* NMDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
