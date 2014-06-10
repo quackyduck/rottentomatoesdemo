@@ -34,85 +34,95 @@
 {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor blackColor];
     self.networkActivityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     [self.networkActivityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.networkActivityIndicator];
     [self navigationItem].rightBarButtonItem = barButton;
-    self.navigationItem.title = self.movieInfo.title;
     
-    if (self.movieInfo.largePosterImage) {
-        self.posterView.image = self.movieInfo.largePosterImage;
-    }
-    else {
     
-        NSLog(@"URL: %@", self.movieInfo.largePosterURL);
-        
-        NSURL *url = [NSURL URLWithString:self.movieInfo.largePosterURL];
-        NSURLRequest *request = [NSURLRequest requestWithURL:url];
-        
-        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        operation.responseSerializer = [AFImageResponseSerializer serializer];
-        
-        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            
-            UIImage* poster = (UIImage *)responseObject;
-            UIImage* croppedImage = nil;
-            
-            NSLog(@"Width: %f, Height: %f", poster.size.width, poster.size.height);
-            
-            // Whole screen
-            CGRect screenRect = [[UIScreen mainScreen] bounds];
-            
-            // How much larger is our image than the screen?
-            CGFloat scalingFactor = screenRect.size.height / poster.size.height;
-            
-            // Get the new width which is bigger than our screen's width
-            CGFloat scaledWidth = poster.size.width * scalingFactor;
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,32,32)];
+    titleLabel.textColor = [UIColor blackColor];
+    titleLabel.text = self.movieInfo.title;
+    [titleLabel setFont:[UIFont fontWithName:@"Avenir-Black" size:18.0]];
 
-            // Calculate the new X coordinate which will be offscreen
-            CGFloat offScreenX = (scaledWidth - screenRect.size.width)/2;
-            
-            // Begin drawing the new image
-            UIGraphicsBeginImageContextWithOptions(screenRect.size, YES, 0.0);
+    self.navigationItem.titleView = titleLabel;
+    
+    
+    NSLog(@"URL: %@", self.movieInfo.largePosterURL);
+    
+    NSURL *url = [NSURL URLWithString:self.movieInfo.largePosterURL];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    operation.responseSerializer = [AFImageResponseSerializer serializer];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        UIImage* poster = (UIImage *)responseObject;
+        UIImage* croppedImage = nil;
+        
+        NSLog(@"Width: %f, Height: %f", poster.size.width, poster.size.height);
+        
+        // Whole screen
+        CGRect screenRect = [[UIScreen mainScreen] bounds];
+        
+        // How much larger is our image than the screen?
+        CGFloat scalingFactor = screenRect.size.height / poster.size.height;
+        
+        // Get the new width which is bigger than our screen's width
+        CGFloat scaledWidth = poster.size.width * scalingFactor;
 
-            CGPoint croppedPoint = CGPointMake(-offScreenX, 0.0);
-            CGRect croppedRect = CGRectZero;
-            croppedRect.origin = croppedPoint;
-            croppedRect.size.width  = scaledWidth;
-            croppedRect.size.height = screenRect.size.height;
-            
-            // Redraw the downloaded poster in the new rect
-            [poster drawInRect:croppedRect];
-            
-            croppedImage = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            
-            // Assign the image to our UIImageView
-            self.posterView.image = croppedImage;
-            
-            // Save our cropped image
-            self.movieInfo.largePosterImage = croppedImage;
-            
-            // Stop network indicator
-            [self.networkActivityIndicator stopAnimating];
-            
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            
-            NSLog(@"Failed to load large poster image, error %@, url %@", error.description, operation.request.URL);
-            [self.networkActivityIndicator stopAnimating];
-        }];
+        // Calculate the new X coordinate which will be offscreen
+        CGFloat offScreenX = (scaledWidth - screenRect.size.width)/2;
         
-        [self.networkActivityIndicator startAnimating];
-        [operation start];
+        // Begin drawing the new image
+        UIGraphicsBeginImageContextWithOptions(screenRect.size, YES, 0.0);
+
+        CGPoint croppedPoint = CGPointMake(-offScreenX, 0.0);
+        CGRect croppedRect = CGRectZero;
+        croppedRect.origin = croppedPoint;
+        croppedRect.size.width  = scaledWidth;
+        croppedRect.size.height = screenRect.size.height;
         
-    }
+        // Redraw the downloaded poster in the new rect
+        [poster drawInRect:croppedRect];
+        
+        croppedImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        self.posterView.alpha = 0.0;
+        
+        // Assign the image to our UIImageView
+        self.posterView.image = croppedImage;
+
+        
+        // Stop network indicator
+        [self.networkActivityIndicator stopAnimating];
+        
+        [UIView beginAnimations:@"FadeInImage" context:nil];
+        [UIView setAnimationDuration:1.0];
+        self.posterView.alpha = 1.0;
+        [UIView commitAnimations];
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        NSLog(@"Failed to load large poster image, error %@, url %@", error.description, operation.request.URL);
+        [self.networkActivityIndicator stopAnimating];
+    }];
+    
+    [self.networkActivityIndicator startAnimating];
+    [operation start];
     
     CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat synopsisViewOffset = 300.0;
 
     self.titleLabel.text = self.movieInfo.title;
+    [self.titleLabel setFont:[UIFont fontWithName:@"Avenir-Black" size:17.0]];
     self.synopsisLabel.text = self.movieInfo.synopsis;
+    [self.synopsisLabel setFont:[UIFont fontWithName:@"Avenir-Book" size:15.0]];
     [self.synopsisLabel sizeToFit];
     
     // Calculate the size of the translucent synopsis view with padding

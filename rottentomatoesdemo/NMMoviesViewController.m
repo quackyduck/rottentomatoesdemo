@@ -37,17 +37,26 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.rowHeight = 120;
+    self.tableView.rowHeight = 110;
     [self.tableView registerNib:[UINib nibWithNibName:@"NMMovieTableViewCell" bundle:nil] forCellReuseIdentifier:@"MovieCell"];
     
     self.networkActivityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     [self.networkActivityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.networkActivityIndicator];
     [self navigationItem].rightBarButtonItem = barButton;
-    self.navigationItem.title = @"In Theaters";
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,32,32)];
+    titleLabel.textColor = [UIColor blackColor];
+    titleLabel.text = @"In Theaters";
+    [titleLabel setFont:[UIFont fontWithName:@"Avenir-Black" size:18.0]];
+    
+    self.navigationItem.titleView = titleLabel;
+    self.navigationItem.leftBarButtonItem.title = @"";
     
     CGRect errorWindow = CGRectMake(0, 64, 320, 20);
     self.networkErrorView = [[NMNetworkErrorView alloc] initWithFrame:errorWindow];
+    self.networkErrorView.alpha = 0.75;
+    self.networkErrorView.backgroundColor = [UIColor blackColor];
     [self.navigationController.view.window addSubview:self.networkErrorView];
     [self.networkErrorView setHidden:YES];
     
@@ -119,42 +128,44 @@
     
     NMMovie *movie = self.movies[indexPath.row];
     movieCell.titleLabel.text = movie.title;
+    [movieCell.titleLabel setFont:[UIFont fontWithName:@"Avenir-Black" size:17.0]];
+    
     movieCell.synopsisLabel.text = movie.synopsis;
+    [movieCell.synopsisLabel setFont:[UIFont fontWithName:@"Avenir-Book" size:15.0]];
+    
     movieCell.posterImageView.image = nil;
     
-    if (movie.mediumPosterImage) {
-        NSLog(@"Got our poster image already.");
-        movieCell.posterImageView.image = movie.mediumPosterImage;
-    }
-    else {
-        NSLog(@"Fetch poster image from the API");
-        movieCell.posterImageView.image = nil;
-        NSURL *url = [NSURL URLWithString:movie.mediumPosterURL];
-        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    movieCell.posterImageView.image = nil;
+    NSURL *url = [NSURL URLWithString:movie.mediumPosterURL];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    operation.responseSerializer = [AFImageResponseSerializer serializer];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        operation.responseSerializer = [AFImageResponseSerializer serializer];
+        UIImage* poster = (UIImage *)responseObject;
+        movieCell.posterImageView.alpha = 0.0;
         
-        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            
-            UIImage* poster = (UIImage *)responseObject;
-            
-            CGSize itemSize = CGSizeMake(poster.size.width, poster.size.height);
-            UIGraphicsBeginImageContext(itemSize);
-            CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-            [poster drawInRect:imageRect];
-            movieCell.posterImageView.image = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            
-            movie.mediumPosterImage = movieCell.posterImageView.image;
-            
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            
-            NSLog(@"Failed to load profile poster image.");
-        }];
+        CGSize itemSize = CGSizeMake(poster.size.width, poster.size.height);
+        UIGraphicsBeginImageContext(itemSize);
+        CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+        [poster drawInRect:imageRect];
+        movieCell.posterImageView.image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
         
-        [operation start];
-    }
+        [UIView beginAnimations:@"FadeInImageCell" context:nil];
+        [UIView setAnimationDuration:0.5];
+        movieCell.posterImageView.alpha = 1.0;
+        [UIView commitAnimations];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        NSLog(@"Failed to load profile poster image.");
+    }];
+    
+    [operation start];
     
     return movieCell;
 }

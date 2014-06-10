@@ -17,7 +17,8 @@
     
     NMMoviesViewController *vc = [[NMMoviesViewController alloc] initWithNibName:@"NMMoviesViewController" bundle:nil];
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
-    
+    nvc.navigationBar.barTintColor = [UIColor colorWithRed:255.0f/255.0f green:204.0f/255.0f blue:0.0f/255.0f alpha:1.0];
+    nvc.navigationBar.tintColor = [UIColor blackColor];
     self.window.rootViewController = nvc;
     
     
