@@ -18,12 +18,14 @@ Completed user stories:
  * [x] Optional: All images fade in (optional)
  * [x] Optional: Customize the navigation bar. (optional)
  * [x] Optional: Add a tab bar for Box Office and DVD. (optional)
- * [] Optional: All images should be cached in memory and disk. In other words, images load immediately upon cold start (optional).
+ * [ ] Optional: All images should be cached in memory and disk. In other words, images load immediately upon cold start (optional).
 Customize the highlight and selection effect of the cell. - Actually, I enabled support for this, however, because I'm not caching the URL to disk, my AFNetworking call fails when there is no network and therefore this doesn't really work.
  
 Notes:
 
 I spent a bit of time hacking with not a lot of time to make things look nice. My LiceCap gif doesn't really show that the images fade in nicely. 
+
+
 
 Walkthrough of all user stories:
 
