@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface NMMoviesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
-
+- (id)initWithNibName:(NSString *)nibNameOrNil type:(NSInteger)type;
 @end

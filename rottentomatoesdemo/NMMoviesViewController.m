@@ -19,15 +19,17 @@
 @property NMNetworkErrorView *networkErrorView;
 @property UIRefreshControl *refreshControl;
 @property (atomic, copy) NSMutableArray *movies;
+@property NSInteger controllerType;
 @end
 
 @implementation NMMoviesViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithNibName:(NSString *)nibNameOrNil type:(NSInteger)type
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:nibNameOrNil bundle:nil];
     if (self) {
         self.movies = [[NSMutableArray alloc] init];
+        self.controllerType = type;
     }
     return self;
 }
@@ -43,7 +45,13 @@
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,32,32)];
     titleLabel.textColor = [UIColor blackColor];
-    titleLabel.text = @"In Theaters";
+    
+    if (self.controllerType == 0) {
+        titleLabel.text = @"In Theaters";
+    }
+    else {
+        titleLabel.text = @"Top DVD Rentals";
+    }
     [titleLabel setFont:[UIFont fontWithName:@"Avenir-Black" size:18.0]];
     
     self.navigationItem.titleView = titleLabel;
@@ -110,7 +118,13 @@
 }
 
 - (void)refresh {
-    NSString *url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=dqghrug2e4mwtn4jv2hyecsy";
+    NSString *url;
+    if (self.controllerType == 0) {
+        url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=dqghrug2e4mwtn4jv2hyecsy";
+    }
+    else {
+        url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=dqghrug2e4mwtn4jv2hyecsy";
+    }
     [self downloadMoviesForURL:url];
 }
 

@@ -11,6 +11,8 @@
 		0A2CDA3619459BDE00FCA039 /* NMDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2CDA3419459BDE00FCA039 /* NMDetailViewController.xib */; };
 		0A7DACB91942DA99009806DF /* NMMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7DACB81942DA99009806DF /* NMMovie.m */; };
 		0AC6069C19441493003617C6 /* NMNetworkErrorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC6069B19441493003617C6 /* NMNetworkErrorView.m */; };
+		0AD7DE5A1948139400AE89C8 /* compact10.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD7DE581948139400AE89C8 /* compact10.png */; };
+		0AD7DE5B1948139400AE89C8 /* film50.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD7DE591948139400AE89C8 /* film50.png */; };
 		0AE91FCD194033B600AFEAB9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AE91FCC194033B600AFEAB9 /* Foundation.framework */; };
 		0AE91FCF194033B600AFEAB9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AE91FCE194033B600AFEAB9 /* CoreGraphics.framework */; };
 		0AE91FD1194033B600AFEAB9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AE91FD0194033B600AFEAB9 /* UIKit.framework */; };
@@ -48,6 +50,8 @@
 		0A7DACB81942DA99009806DF /* NMMovie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NMMovie.m; sourceTree = "<group>"; };
 		0AC6069A19441493003617C6 /* NMNetworkErrorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NMNetworkErrorView.h; sourceTree = "<group>"; };
 		0AC6069B19441493003617C6 /* NMNetworkErrorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NMNetworkErrorView.m; sourceTree = "<group>"; };
+		0AD7DE581948139400AE89C8 /* compact10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compact10.png; sourceTree = "<group>"; };
+		0AD7DE591948139400AE89C8 /* film50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = film50.png; sourceTree = "<group>"; };
 		0AE91FC9194033B600AFEAB9 /* rottentomatoesdemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rottentomatoesdemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AE91FCC194033B600AFEAB9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0AE91FCE194033B600AFEAB9 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -183,6 +187,8 @@
 		0AE91FD3194033B600AFEAB9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0AD7DE581948139400AE89C8 /* compact10.png */,
+				0AD7DE591948139400AE89C8 /* film50.png */,
 				0AE91FD4194033B600AFEAB9 /* rottentomatoesdemo-Info.plist */,
 				0AE91FD5194033B600AFEAB9 /* InfoPlist.strings */,
 				0AE91FD8194033B600AFEAB9 /* main.m */,
@@ -287,6 +293,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AD7DE5B1948139400AE89C8 /* film50.png in Resources */,
+				0AD7DE5A1948139400AE89C8 /* compact10.png in Resources */,
 				0AE91FD7194033B600AFEAB9 /* InfoPlist.strings in Resources */,
 				0AE91FDF194033B600AFEAB9 /* Images.xcassets in Resources */,
 				0A2CDA3619459BDE00FCA039 /* NMDetailViewController.xib in Resources */,

@@ -20,11 +20,30 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    NMMoviesViewController *vc = [[NMMoviesViewController alloc] initWithNibName:@"NMMoviesViewController" bundle:nil];
+    NSMutableArray *tabItems = [[NSMutableArray alloc] initWithCapacity:2];
+    
+    NMMoviesViewController *vc = [[NMMoviesViewController alloc] initWithNibName:@"NMMoviesViewController" type:0];
+    NMMoviesViewController *vc2 = [[NMMoviesViewController alloc] initWithNibName:@"NMMoviesViewController" type:1];
+    
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
     nvc.navigationBar.barTintColor = [UIColor colorWithRed:255.0f/255.0f green:204.0f/255.0f blue:0.0f/255.0f alpha:1.0];
     nvc.navigationBar.tintColor = [UIColor blackColor];
-    self.window.rootViewController = nvc;
+    nvc.tabBarItem.title = @"In Theaters";
+    nvc.tabBarItem.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"film50" ofType:@"png"]];
+    [tabItems addObject:nvc];
+    
+    UINavigationController *nvc2 = [[UINavigationController alloc] initWithRootViewController:vc2];
+    nvc2.navigationBar.barTintColor = [UIColor colorWithRed:255.0f/255.0f green:204.0f/255.0f blue:0.0f/255.0f alpha:1.0];
+    nvc2.navigationBar.tintColor = [UIColor blackColor];
+    nvc2.tabBarItem.title = @"DVD Rentals";
+    nvc2.tabBarItem.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"compact10" ofType:@"png"]];
+    [tabItems addObject:nvc2];
+    
+    
+    UITabBarController *tbc = [[UITabBarController alloc] init];
+    tbc.viewControllers = @[nvc, nvc2];
+    
+    self.window.rootViewController = tbc;
     
     
     self.window.backgroundColor = [UIColor whiteColor];
