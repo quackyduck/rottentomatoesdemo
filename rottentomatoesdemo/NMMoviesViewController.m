@@ -12,11 +12,12 @@
 #import "NMNetworkErrorView.h"
 #import "NMDetailViewController.h"
 #import <AFNetworking/AFNetworking.h>
+#import "UIImageView+AFNetworking.h"
 
 @interface NMMoviesViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property NMNetworkErrorView *networkErrorView;
-@property (nonatomic, strong) UIActivityIndicatorView *networkActivityIndicator;
+@property UIRefreshControl *refreshControl;
 @property (atomic, copy) NSMutableArray *movies;
 @end
 
@@ -40,11 +41,6 @@
     self.tableView.rowHeight = 110;
     [self.tableView registerNib:[UINib nibWithNibName:@"NMMovieTableViewCell" bundle:nil] forCellReuseIdentifier:@"MovieCell"];
     
-    self.networkActivityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-    [self.networkActivityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
-    UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.networkActivityIndicator];
-    [self navigationItem].rightBarButtonItem = barButton;
-    
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,32,32)];
     titleLabel.textColor = [UIColor blackColor];
     titleLabel.text = @"In Theaters";
@@ -60,6 +56,9 @@
     [self.navigationController.view.window addSubview:self.networkErrorView];
     [self.networkErrorView setHidden:YES];
     
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refreshInvoked:forState:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:self.refreshControl];
     
     [self refresh];
     
@@ -93,23 +92,21 @@
         self.movies = currentMovies;
         
         [self.tableView reloadData];
-        [self.networkActivityIndicator stopAnimating];
+        [self.refreshControl endRefreshing];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         NSLog(@"Failed to load movies data from Rotten Tomatoes: %@", error.description);
-        [self.networkActivityIndicator stopAnimating];
         [self.networkErrorView setHidden:NO];
+        [self.refreshControl endRefreshing];
     }];
     
-    [self.networkActivityIndicator startAnimating];
     [operation start];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView.contentOffset.y < -100 && !self.networkActivityIndicator.isAnimating) {
-        [self refresh];
-    }
+-(void) refreshInvoked:(id)sender forState:(UIControlState)state {
+    NSLog(@"REFRESH BABY!");
+    [self refresh];
 }
 
 - (void)refresh {
@@ -133,39 +130,20 @@
     movieCell.synopsisLabel.text = movie.synopsis;
     [movieCell.synopsisLabel setFont:[UIFont fontWithName:@"Avenir-Book" size:15.0]];
     
-    movieCell.posterImageView.image = nil;
-    
-    
-    movieCell.posterImageView.image = nil;
+
     NSURL *url = [NSURL URLWithString:movie.mediumPosterURL];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    operation.responseSerializer = [AFImageResponseSerializer serializer];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        UIImage* poster = (UIImage *)responseObject;
+
+    [movieCell.posterImageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
         movieCell.posterImageView.alpha = 0.0;
-        
-        CGSize itemSize = CGSizeMake(poster.size.width, poster.size.height);
-        UIGraphicsBeginImageContext(itemSize);
-        CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-        [poster drawInRect:imageRect];
-        movieCell.posterImageView.image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        [UIView beginAnimations:@"FadeInImageCell" context:nil];
-        [UIView setAnimationDuration:0.5];
-        movieCell.posterImageView.alpha = 1.0;
-        [UIView commitAnimations];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        movieCell.posterImageView.image = image;
+        [UIView animateWithDuration:0.25
+                         animations:^{
+                             movieCell.posterImageView.alpha = 1.0;
+                         }];
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
         NSLog(@"Failed to load profile poster image.");
     }];
-    
-    [operation start];
     
     return movieCell;
 }

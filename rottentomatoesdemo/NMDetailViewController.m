@@ -9,6 +9,7 @@
 #import "NMDetailViewController.h"
 #import "NMMovie.h"
 #import <AFNetworking/AFNetworking.h>
+#import "UIImageView+AFNetworking.h"
 
 @interface NMDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *posterView;
@@ -25,7 +26,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-//        self.view.backgroundColor = [UIColor blackColor];
     }
     return self;
 }
@@ -54,15 +54,12 @@
     NSURL *url = [NSURL URLWithString:self.movieInfo.largePosterURL];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    operation.responseSerializer = [AFImageResponseSerializer serializer];
+    [self.networkActivityIndicator startAnimating];
     
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.posterView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
         
-        UIImage* poster = (UIImage *)responseObject;
+        UIImage* poster = image;
         UIImage* croppedImage = nil;
-        
-        NSLog(@"Width: %f, Height: %f", poster.size.width, poster.size.height);
         
         // Whole screen
         CGRect screenRect = [[UIScreen mainScreen] bounds];
@@ -72,13 +69,13 @@
         
         // Get the new width which is bigger than our screen's width
         CGFloat scaledWidth = poster.size.width * scalingFactor;
-
+        
         // Calculate the new X coordinate which will be offscreen
         CGFloat offScreenX = (scaledWidth - screenRect.size.width)/2;
         
         // Begin drawing the new image
         UIGraphicsBeginImageContextWithOptions(screenRect.size, YES, 0.0);
-
+        
         CGPoint croppedPoint = CGPointMake(-offScreenX, 0.0);
         CGRect croppedRect = CGRectZero;
         croppedRect.origin = croppedPoint;
@@ -95,25 +92,18 @@
         
         // Assign the image to our UIImageView
         self.posterView.image = croppedImage;
-
+        [UIView animateWithDuration:0.25
+                         animations:^{
+                             self.posterView.alpha = 1.0;
+                         }];
+        
         
         // Stop network indicator
         [self.networkActivityIndicator stopAnimating];
-        
-        [UIView beginAnimations:@"FadeInImage" context:nil];
-        [UIView setAnimationDuration:1.0];
-        self.posterView.alpha = 1.0;
-        [UIView commitAnimations];
-        
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-        NSLog(@"Failed to load large poster image, error %@, url %@", error.description, operation.request.URL);
-        [self.networkActivityIndicator stopAnimating];
+
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+        NSLog(@"Failed to load profile poster image.");
     }];
-    
-    [self.networkActivityIndicator startAnimating];
-    [operation start];
     
     CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
