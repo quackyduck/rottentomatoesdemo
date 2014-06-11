@@ -20,6 +20,7 @@
 @property UIRefreshControl *refreshControl;
 @property (atomic, copy) NSMutableArray *movies;
 @property NSInteger controllerType;
+@property (nonatomic, strong) UIActivityIndicatorView *networkActivityIndicator;
 @end
 
 @implementation NMMoviesViewController
@@ -68,6 +69,11 @@
     [self.refreshControl addTarget:self action:@selector(refreshInvoked:forState:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:self.refreshControl];
     
+    self.networkActivityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    [self.networkActivityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
+    UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.networkActivityIndicator];
+    [self navigationItem].rightBarButtonItem = barButton;
+    
     [self refresh];
     
 }
@@ -101,24 +107,28 @@
         
         [self.tableView reloadData];
         [self.refreshControl endRefreshing];
+        [self.networkActivityIndicator stopAnimating];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         NSLog(@"Failed to load movies data from Rotten Tomatoes: %@", error.description);
         [self.networkErrorView setHidden:NO];
         [self.refreshControl endRefreshing];
+        [self.networkActivityIndicator stopAnimating];
     }];
     
     [operation start];
 }
 
 -(void) refreshInvoked:(id)sender forState:(UIControlState)state {
-    NSLog(@"REFRESH BABY!");
     [self refresh];
 }
 
 - (void)refresh {
     NSString *url;
+    
+    [self.networkActivityIndicator startAnimating];
+    
     if (self.controllerType == 0) {
         url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=dqghrug2e4mwtn4jv2hyecsy";
     }
